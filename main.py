@@ -5,35 +5,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# sns.set_theme(style="whitegrid", palette="pastel")
-# plt.rcParams['figure.figsize'] = (12,8)
-# print("Анализ данных о размерах лепестков и чашелистников для различных типов цветов ириса")
-# print("="*60)
-#
-# #1. Загрузка встроенного датасета
-# iris = sns.load_dataset('iris')
-# print(f"Размер датасета: {iris.shape}")
-# print(f"\nПервые пять строк данных: ")
-# print(iris.head())
-# print(f"\nИнформация о данных: ")
-# print(iris.info())
-# print(f"\nПропущенные значения: ")
-# print(iris.isnull().sum())
-#
-# #2. Количество
-# print("\n" + "="*60)
-# print("1. ВИЗУАЛИЗАЦИЯ КОЛИЧЕСТВА")
-# print("="*60)
-#
-# plt.figure(figsize=(15,10))
-# plt.subplot(2,3,1)
-# sns.countplot(data=iris, x='species', palette=['lightcoral', 'lightgreen'])
-# plt.title('Общее количество лепестков и чашелистников')
-# plt.xlabel('Выжил (0 - нет, 1 - да)')
-# plt.ylabel('Количество')
-# for i, count in enumerate(iris['species'].value_counts().sort_index()):
-#     plt.text(i, count+5, str(count), ha='center', va='bottom', fontweight='bold')
-
+# Выберите самостоятельно датасет из предложенных ниже,
+# встроенный в библиотеку Seaborn. Произведите визуализацию данных. Iris — содержит размеры лепестков и чашелистиков для четырёх
+# типов цветов ириса.
 
 sns.set_theme(style="whitegrid", palette="pastel")
 plt.rcParams['figure.figsize'] = (12, 8)
@@ -55,7 +29,6 @@ print("\n" + "="*60)
 print("1. ВИЗУАЛИЗАЦИЯ КОЛИЧЕСТВА")
 print("="*60)
 plt.figure(figsize=(15, 10))
-# plt.subplot(2, 3, 1)
 sns.countplot(data=iris, x='species', order=['setosa', 'versicolor', 'virginica'])
 plt.title('Распределение видов ириса в датасете')
 plt.xlabel('Вид ириса')
@@ -105,3 +78,44 @@ sns.heatmap( correlation_matrix, mask=mask, annot=True, cmap='coolwarm', center=
 plt.title("Корреляционная матрица", fontsize=16, fontweight='bold')
 plt.tight_layout()
 plt.show()
+
+#Визуализация статистики
+fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+
+sns.barplot(data=iris, x='species', y='petal_length', ci=None, ax=axes[0], palette='viridis')
+axes[0].set_title('Средняя длина лепестков по видам ириса')
+axes[0].set_xlabel('Вид ириса')
+axes[0].set_ylabel('Средняя длина лепестка (см)')
+
+sns.barplot(data=iris, x='species', y='petal_width', ci=None, ax=axes[1], palette='magma')
+axes[1].set_title('Средняя ширина лепестков по видам ириса')
+axes[1].set_xlabel('Вид ириса')
+axes[1].set_ylabel('Средняя ширина лепестка (см)')
+
+plt.tight_layout()
+plt.show()
+
+print("\n" + "="*60)
+print("ОСНОВНЫЕ ВЫВОДЫ:")
+print("="*60)
+total_samples = len(iris)
+print(f"Общее количество образцов: {total_samples}")
+
+setosa_count = len(iris[iris['species'] == 'setosa'])
+versicolor_count = len(iris[iris['species'] == 'versicolor'])
+virginica_count = len(iris[iris['species'] == 'virginica'])
+
+print(f"\nКоличество образцов по видам:")
+print(f"  • Setosa: {setosa_count} ({setosa_count/total_samples*100:.1f}%)")
+print(f"  • Versicolor: {versicolor_count} ({versicolor_count/total_samples*100:.1f}%)")
+print(f"  • Virginica: {virginica_count} ({virginica_count/total_samples*100:.1f}%)")
+
+print("\n" + "="*60)
+print(f"\nСредние характеристики по видам:")
+for species in iris['species'].unique():
+    species_data = iris[iris['species'] == species]
+    print(f"\n{species.upper()}:")
+    print(f"  Средняя длина чашелистика: {species_data['sepal_length'].mean():.2f} см")
+    print(f"  Средняя ширина чашелистика: {species_data['sepal_width'].mean():.2f} см")
+    print(f"  Средняя длина лепестка: {species_data['petal_length'].mean():.2f} см")
+    print(f"  Средняя ширина лепестка: {species_data['petal_width'].mean():.2f} см")
